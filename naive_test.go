@@ -37,3 +37,23 @@ func TestThousandthPrime(t *testing.T) {
 		}
 	}
 }
+
+var result Number
+
+func benchmarkSieve(numPrimes int, s Sieve, b *testing.B) {
+	var r Number
+	for n := 0; n < b.N; n++ {
+		for nth := 0; nth < numPrimes; nth++ {
+			r, _ = s.NextPrime()
+		}
+	}
+	// try to avoid compiler operations from not storing the result of NextPrime
+	result = r
+}
+
+func BenchmarkNaive1(b *testing.B)  { benchmarkSieve(1, NewNaiveSieve(), b) }
+func BenchmarkNaive2(b *testing.B)  { benchmarkSieve(2, NewNaiveSieve(), b) }
+func BenchmarkNaive3(b *testing.B)  { benchmarkSieve(3, NewNaiveSieve(), b) }
+func BenchmarkNaive10(b *testing.B) { benchmarkSieve(10, NewNaiveSieve(), b) }
+func BenchmarkNaive20(b *testing.B) { benchmarkSieve(20, NewNaiveSieve(), b) }
+func BenchmarkNaive40(b *testing.B) { benchmarkSieve(40, NewNaiveSieve(), b) }
